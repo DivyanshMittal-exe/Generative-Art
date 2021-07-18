@@ -12,7 +12,7 @@ function setup(){
 
 function draw(){
     // console.log("Works")
-    background(56,23,43);
+    background('#14213d');
     parray.forEach(particle => {
         particle.draw();
         particle.update();
@@ -45,7 +45,7 @@ class Partictle{
 
     draw(){
         noStroke();
-        fill('rgba(255,255,255,0.5)');
+        fill('rgba(252, 163, 17,0.5)');
         circle(this.pos.x,this.pos.y,this.size);
     }
 
@@ -54,7 +54,7 @@ class Partictle{
         parray.forEach(par => {
             const len = dist(this.pos.x,this.pos.y,par.pos.x,par.pos.y);
             if (len < 120 && total <10){
-                stroke('rgba(255,255,255,0.1)');
+                stroke('rgba(252, 163, 17,0.1)');
                 line(this.pos.x,this.pos.y,par.pos.x,par.pos.y);
                 total++;
             }

@@ -6,11 +6,11 @@ let length = 0;
 let rand = 0;
 
 
-let color = ['#fcf4ec','#468ba1','#b95252','#f4c04f'];
+let color = ['#e07a5f','#f4f1de','#81b29a','#f2cc8f'];
 
 function setup() {
   createCanvas(window.innerWidth, window.innerHeight);
-  background('#6a9a71');
+  background('#3d405b');
 //   for (let j = 2*radius; j < height; j += 3*radius) {
 //     for(let i = 0; i < width;){
 
