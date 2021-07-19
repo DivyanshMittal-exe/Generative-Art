@@ -1,0 +1,21 @@
+body,.container-fluid{
+    background-color: #090c10;
+}
+html{
+    background-color: #090c10;
+
+    margin: 0;
+}
+
+.card-body,.buttonSurrond{
+    background-color:#0d1117;
+}
+.card-title,.card-text{
+    color: #c9d1d9;
+}
+.btn:link,.btn:active,.btn:hover,.btn:visited{
+
+    background-color:#238636;
+    color: #c9d1d9;
+
+}
