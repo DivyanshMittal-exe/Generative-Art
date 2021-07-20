@@ -67,6 +67,8 @@ function makeTree(x,y){
 function setup(){
     createCanvas(window.innerWidth, window.innerHeight);
     background('#3d405b');
+
+    console.log(width);
     maxTreeH = height/3;
     minTreeH = height/5;
     // angleMode(DEGREES);
@@ -93,7 +95,7 @@ function setup(){
 }
 
 function draw(){
-    if (i <= 70){
+    if (i <= width/20){
         if(i%modfac == 0){
             background('rgba(255,255,255,0.15)');
         }

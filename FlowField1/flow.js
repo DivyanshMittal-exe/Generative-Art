@@ -3,7 +3,7 @@ let rows,cols;
 let tfac = 1;
 let tot = 4000;
 let noiseScale = 100;
-let mass = 1;
+let mass = 2;
 let colorsedd;
 let partarray = []
 
@@ -12,7 +12,7 @@ function particle(){
   // this.vel = p5.Vector.random2D();
   this.vel = createVector(0,0);
   this.acc = createVector(0,0);
-  this.maxSpeed = 5;
+  this.maxSpeed = 8;
 
   this.prevPos = this.pos.copy();
 
@@ -51,20 +51,28 @@ function particle(){
   this.edges = function(){
     if(this.pos.x > width){
       this.pos.x = 0;
+      this.pos.y += random(height/20) -height/40 ;
+
       this.updatePrev();
     }
     if(this.pos.x < 0){
       this.pos.x = width;
+      this.pos.y += random(height/20) -height/40 ;
+
       this.updatePrev();
 
     }
     if(this.pos.y > height){
       this.pos.y = 0;
+      this.pos.x += random(width/20) -width/40 ;
       this.updatePrev();
 
     }
     if(this.pos.y < 0){
       this.pos.y = height ;
+      this.pos.x += random(width/20) -width/40 ;
+
+
       this.updatePrev();
 
     }
@@ -99,7 +107,7 @@ function setup() {
 
 function draw() {
  colorMode(RGB,255,255,255,100);
- background(0,0,0,0.06);
+ background(0,0,0,0.1);
 
 
 

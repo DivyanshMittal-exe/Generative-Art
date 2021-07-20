@@ -55,20 +55,26 @@ function particle(){
 
   this.edges = function(){
     if(this.pos.x > width){
+      this.pos.y += random(height/40) -height/80 ;
       this.pos.x = 0;
+
       this.updatePrev();
     }
     if(this.pos.x < 0){
       this.pos.x = width;
+      this.pos.y += random(height/40) -height/80 ;
+
       this.updatePrev();
 
     }
     if(this.pos.y > height){
+      this.pos.x += random(width/40) -width/80 ;
       this.pos.y = 0;
       this.updatePrev();
 
     }
     if(this.pos.y < 0){
+      this.pos.x += random(width/40) -width/80 ;
       this.pos.y = height ;
       this.updatePrev();
 
@@ -124,7 +130,7 @@ function setup() {
 
 function draw() {
  colorMode(RGB,255,255,255,100);
- background(0,0,0,0.06);
+ background(0,0,0,0.1);
 
 
 

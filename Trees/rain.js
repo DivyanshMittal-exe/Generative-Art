@@ -1,7 +1,7 @@
 let scl = 30;
 let rows,cols;
 let tfac = 1;
-let tot = 400;
+let tot;
 let noiseScale = 200;
 let mass = 12;
 let colorsedd;
@@ -99,6 +99,10 @@ function particle(){
 
 function setup() {
   createCanvas(window.innerWidth, window.innerHeight,P2D);
+  console.log(height);
+  tot = width*height/2600;
+  console.log(tot);
+
 
   colorsedd = random(300);
   cols = Math.floor(width/scl);
@@ -108,6 +112,9 @@ function setup() {
     partarray[i] = new particle()
   }
   background(0);
+  erase()
+  rect(0,0,width,height);
+  noErase();
 }
 
 function draw() {
@@ -127,7 +134,7 @@ function draw() {
  
     
   // fr.html(frameRate());
-  console.log(frameRate());
+  // console.log(frameRate());
 
 }
 
