@@ -2,10 +2,11 @@ var i = 0;
 var j = 0;
 let seed;
 
-let hfac = 20;
-let hmin = 3
+let hfac = 10;
+let hmin = 2.5;
 let maxTreeH,minTreeH;
 let modfac =7;
+let gradH;
 let Nfac = 80;
 let hmapmin;
 
@@ -75,6 +76,8 @@ function setup(){
     // rotate(PI);
     fill(255)
 
+    gradH = height/1400;
+
     beginShape()
     vertex(0,height)
     for(let t=0; t < width;t++){
@@ -90,19 +93,20 @@ function setup(){
 }
 
 function draw(){
-    if (i <= 34){
+    if (i <= 70){
         if(i%modfac == 0){
-            background('rgba(255,255,255,0.3)');
+            background('rgba(255,255,255,0.15)');
         }
         let x = random(width);
         let y = random(height/hfac) + height -height/hmin;
+        y+=i*gradH;
 
         
 
         makeTree(x,y);
         i++;
-    
-       
+        
+        
     }else{
         noLoop
     }
