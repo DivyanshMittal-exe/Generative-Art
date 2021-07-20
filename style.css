@@ -32,8 +32,8 @@ html{
 }
 
 #icon1,#icon2,#icon3,#icon4{
-    font-size: 1.3rem;
-    margin-left: 2vh;
+    font-size: 1.6rem;
+    padding: 2vh;
     color: #58a6ff !important;
     ;
   }
@@ -43,9 +43,9 @@ html{
 
   }
 
-#icon4{
+/* #icon4{
     padding-right: 5vw;
-}
+} */
 .nav-,.nav-t:hover,.nav-t:active,.nav-t:visited,.nav-t:link{
     color: #f0f6fc;
     text-decoration: none;
@@ -54,3 +54,32 @@ html{
     background-color: #161b22
     ;
 }
+
+#cntctcon{
+    padding-top: 10vh;
+    height: 20vh;
+  }
+  
+  #cntct{
+    
+    background-color: #0d1117    ;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    flex-direction: column ;
+    
+  }
+  #contacts{
+    align-items: center; 
+    display: flex;
+    justify-content: center;
+    width: 100vh;
+    margin: auto;
+    
+  
+  }
+
+  .footday{
+      background-color: #0d1117;
+
+  }
