@@ -8,8 +8,13 @@ function setup(){
     background('rgb(41, 50, 65)');
     
 }
-
 function draw(){
+    for (let i = 0; i < 8; i++) {
+        draw2();
+        
+    }
+}
+function draw2(){
     stroke('rgb(224, 251, 252)');
     strokeWeight(3);
     if (random(1) < 0.5) {

@@ -23,10 +23,15 @@ function setup() {
   //  initangle = -1*random(PI);noise(i/scale,j/scale,seed)
    initangle = noise(100,100,seed)*TAU - PI;
   //  initangle = PI /2;
-  background('#e07a5f');
+  background('#f4f1de');
 }
-
-function draw() {
+function draw(){
+  for (let i = 0; i < 5; i++) {
+      draw2();
+      
+  }
+}
+function draw2(){
     // loadPixels()
     
     

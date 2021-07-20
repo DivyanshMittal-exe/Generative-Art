@@ -71,6 +71,12 @@ function setup(){
 }
 
 function draw(){
+    for (let i = 0; i < 5; i++) {
+        draw2();
+        
+    }
+  }
+  function draw2(){
     noStroke();
 
     if (random(1) < 0.25) {

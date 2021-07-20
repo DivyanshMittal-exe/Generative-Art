@@ -44,6 +44,12 @@ function setup(){
 }
 
 function draw(){
+    for (let i = 0; i < 5; i++) {
+        draw2();
+        
+    }
+  }
+  function draw2(){
     index = Math.floor(x/spacing);
     stroke(color[colindex[index]]);
     strokeWeight(3);

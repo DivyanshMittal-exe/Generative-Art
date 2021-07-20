@@ -18,7 +18,13 @@ function setup() {
 
 // }
 }
-function draw() {
+function draw(){
+  for (let i = 0; i < 8; i++) {
+      draw2();
+      
+  }
+}
+function draw2(){
   
   let length = Math.floor(Math.random() * width/16);
 
