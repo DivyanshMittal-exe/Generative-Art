@@ -2,11 +2,13 @@
 let cooolor;
 let tats; 
 let screenP;
-let index= 0;
+let indexF= 0;
+let indexI= 0;
 let stck;
+let stckL;
 let perCycle =1000;
 
-let dirnarray = [0,1,2,3];
+let dirnarray = [0,1,2,3,4,5,6,7];
 
 function shuffle(array) {
   var currentIndex = array.length,  randomIndex;
@@ -77,6 +79,8 @@ function setup() {
 
   background(tats/5);
   stck = new Array(width*height);
+
+  stckL = stck.length;
   for(let i = 0; i < stck.length; i++){
     stck[i] = new Array(5);
   }
@@ -106,8 +110,8 @@ function setup() {
   point(w,h);
   screenP[w][h] = 1;
   cooolor[r][g][b] = 1;
-  stck[index] = [w,h,r,g,b];
-  index+=1;
+  stck[indexF%stckL] = [w,h,r,g,b];
+  indexF+=1;
   // stck.push([w,h,r,g,b]);
 
   // console.log([w,h,r,g,b]);
@@ -125,9 +129,11 @@ function draw(){
 function drawStroke() {
   // console.log(index);
   // console.log(stck[0]);
-  if(index > 0){
-    index-=1;
-    let cur = stck[index];
+  if(indexI != indexF){
+    
+    let cur = stck[indexI%stckL];
+    indexI+=1;
+    
     dirnarray = shuffle(dirnarray);
     // console.log(dirnarray)
     for(let t = 0;t<dirnarray.length;t++){
@@ -141,8 +147,8 @@ function drawStroke() {
         // console.log(newcolor);
         stroke(color(newcolor[0],newcolor[1],newcolor[2],255));
         point(cur[0]-1,cur[1]);
-        stck[index] = [cur[0]-1,cur[1],newcolor[0],newcolor[1],newcolor[2]];
-        index+=1;
+        stck[indexF%stckL] = [cur[0]-1,cur[1],newcolor[0],newcolor[1],newcolor[2]];
+        indexF+=1;
         
       }
       if (elele==1 && cur[0] < width-1 && screenP[cur[0]+1][cur[1]]==0 ){
@@ -151,8 +157,8 @@ function drawStroke() {
         stroke(color(newcolor[0],newcolor[1],newcolor[2],255));
         point(cur[0]+1,cur[1]);
         // stck.push([cur[0]+1,cur[1],newcolor[0],newcolor[1],newcolor[2]]);
-        stck[index] = [cur[0]+1,cur[1],newcolor[0],newcolor[1],newcolor[2]];
-        index+=1;
+        stck[indexF%stckL] = [cur[0]+1,cur[1],newcolor[0],newcolor[1],newcolor[2]];
+        indexF+=1;
       }
       if (elele==2 && cur[1] > 0 && screenP[cur[0]][cur[1]-1]==0 ){
         screenP[cur[0]][cur[1]-1]=1;
@@ -160,8 +166,8 @@ function drawStroke() {
         stroke(color(newcolor[0],newcolor[1],newcolor[2],255));
         point(cur[0],cur[1]-1);
         // stck.push([cur[0],cur[1]-1,newcolor[0],newcolor[1],newcolor[2]]);
-        stck[index] = [cur[0],cur[1]-1,newcolor[0],newcolor[1],newcolor[2]];
-        index+=1;
+        stck[indexF%stckL] = [cur[0],cur[1]-1,newcolor[0],newcolor[1],newcolor[2]];
+        indexF+=1;
       }
       if (elele==3 && cur[1] <height-1 && screenP[cur[0]][cur[1]+1]==0 ){
         screenP[cur[0]][cur[1]+1]=1;
@@ -169,9 +175,47 @@ function drawStroke() {
         stroke(color(newcolor[0],newcolor[1],newcolor[2],255));
         point(cur[0],cur[1]+1);
         // stck.push([cur[0],cur[1]+1,newcolor[0],newcolor[1],newcolor[2]]);
-        stck[index] = [cur[0],cur[1]+1,newcolor[0],newcolor[1],newcolor[2]];
-        index+=1;
+        stck[indexF%stckL] = [cur[0],cur[1]+1,newcolor[0],newcolor[1],newcolor[2]];
+        indexF+=1;
       }
+      if (elele==4 && cur[0] > 0 && cur[1] > 0 && screenP[cur[0]-1][cur[1]-1]==0 ){
+        screenP[cur[0]-1][cur[1]-1]=1;
+        let newcolor = FillColor(cur[2],cur[3],cur[4]);
+        stroke(color(newcolor[0],newcolor[1],newcolor[2],255));
+        point(cur[0]-1,cur[1]-1);
+        // stck.push([cur[0],cur[1]+1,newcolor[0],newcolor[1],newcolor[2]]);
+        stck[indexF%stckL] = [cur[0]-1,cur[1]-1,newcolor[0],newcolor[1],newcolor[2]];
+        indexF+=1;
+      }
+      if (elele==5 && cur[0] < width-1 && cur[1] > 0 && screenP[cur[0]+1][cur[1]-1]==0 ){
+        screenP[cur[0]+1][cur[1]-1]=1;
+        let newcolor = FillColor(cur[2],cur[3],cur[4]);
+        stroke(color(newcolor[0],newcolor[1],newcolor[2],255));
+        point(cur[0]+1,cur[1]-1);
+        // stck.push([cur[0],cur[1]+1,newcolor[0],newcolor[1],newcolor[2]]);
+        stck[indexF%stckL] = [cur[0]+1,cur[1]-1,newcolor[0],newcolor[1],newcolor[2]];
+        indexF+=1;
+      }
+      if (elele==6 && cur[0] < width-1 && cur[1] < height-1 && screenP[cur[0]+1][cur[1]+1]==0 ){
+        screenP[cur[0]+1][cur[1]+1]=1;
+        let newcolor = FillColor(cur[2],cur[3],cur[4]);
+        stroke(color(newcolor[0],newcolor[1],newcolor[2],255));
+        point(cur[0]+1,cur[1]+1);
+        // stck.push([cur[0],cur[1]+1,newcolor[0],newcolor[1],newcolor[2]]);
+        stck[indexF%stckL] = [cur[0]+1,cur[1]+1,newcolor[0],newcolor[1],newcolor[2]];
+        indexF+=1;
+      }
+      
+      if (elele==7 && cur[0] > 0 && cur[1] < height-1 && screenP[cur[0]-1][cur[1]+1]==0 ){
+        screenP[cur[0]-1][cur[1]+1]=1;
+        let newcolor = FillColor(cur[2],cur[3],cur[4]);
+        stroke(color(newcolor[0],newcolor[1],newcolor[2],255));
+        point(cur[0]-1,cur[1]+1);
+        // stck.push([cur[0],cur[1]+1,newcolor[0],newcolor[1],newcolor[2]]);
+        stck[indexF%stckL] = [cur[0]-1,cur[1]+1,newcolor[0],newcolor[1],newcolor[2]];
+        indexF+=1;
+      }
+
 
     }
     

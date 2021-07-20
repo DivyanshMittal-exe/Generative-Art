@@ -10,10 +10,15 @@ Each piece is unique and most are animated, so do visit [Generative-Art](https:/
 If you too, want to experiment with it, [r/generative]( https://www.reddit.com/r/generative/) is a great place to start and get inspired from. 
 
 
+<img src="RainbowSmokeBFSRand/smoke.png" width="600" >
 
 <img src="Gen/snow.png" width="600" >
+<img src="RainbowSmoke/smoke.png" width="600" >
+
 <img src="Gen/flow2.png" width="600" >
 <img src="Gen/shape.png" width="600" >
+<img src="RainbowSmokeBFS/smoke.png" width="600" >
+
 <img src="Gen/10.png" width="600" >
 <img src="Gen/Background.png" width="600" >
 <img src="Gen/fancy.png" width="600" >
