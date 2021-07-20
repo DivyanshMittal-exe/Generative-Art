@@ -8,14 +8,49 @@ html{
 }
 
 .card-body,.buttonSurrond{
-    background-color:#0d1117;
+    background-color:#161b22;
+    
+
+
+}
+
+.card{
+    /* border-style: solid;
+    border-width: 5px;
+    border-color: #30363d    ;
+    border-radius: 5px; */
+
+    border: 5px solid red;
 }
 .card-title,.card-text{
-    color: #c9d1d9;
+    color: #f0f6fc;
 }
 .btn:link,.btn:active,.btn:hover,.btn:visited{
 
     background-color:#238636;
-    color: #c9d1d9;
+    color: #f0f6fc;
+}
 
+#icon1,#icon2,#icon3,#icon4{
+    font-size: 1.3rem;
+    margin-left: 2vh;
+    color: #58a6ff !important;
+    ;
+  }
+  #icon1:hover,#icon2:hover,#icon3:hover,#icon4:hover{
+    color: coral !important;
+    
+
+  }
+
+#icon4{
+    padding-right: 5vw;
+}
+.nav-,.nav-t:hover,.nav-t:active,.nav-t:visited,.nav-t:link{
+    color: #f0f6fc;
+    text-decoration: none;
+}
+.navbar, .nav-con{
+    background-color: #161b22
+    ;
 }
