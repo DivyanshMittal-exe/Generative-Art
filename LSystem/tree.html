@@ -17,11 +17,36 @@
             padding: 0;
             margin: 0;
         }
+        
+          
+        .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: black;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            
+            /* Position the tooltip */
+            position: absolute;
+            z-index: 1;
+            top: 100%;
+            left: 50%;
+            margin-left: -60px;
+          }
+          
+          .tooltip:hover .tooltiptext {
+            visibility: visible;
+          }
     </style>
 
     
 </head>
 <body>
+    <div class="d-grid gap-2 d-md-block" id = "para" style="position: fixed;left:2%;top:2%;"data-bs-toggle="tooltip" data-bs-placement="top" title="Click generate multiple times">
+        
+    </div>
     <div class="d-grid gap-2 d-md-block" style="position: fixed;right:2%;bottom:2%;">
         <a class="btn btn-primary " href="/Generative-Art/" role="button"><i class="fas fa-chevron-circle-left"></i></a>
         <a class="btn btn-primary " href="javascript:location.reload();" role="button"><i class="fas fa-undo"></i></a>
