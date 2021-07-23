@@ -25,6 +25,7 @@ If you too, want to experiment with it, [r/generative]( https://www.reddit.com/r
 <img src="Background/Background.png" width="600" >
 <img src="Gen/fancy.png" width="600" >
 <img src="Gen/flow.png" width="600" >
+<img src="SinPhotos/sin.png" width="600" >
 
 <img src="Gen/Perlin (2).png" width="600" >
 
