@@ -1,6 +1,6 @@
-let str = "X"
+let str = "F+F+F+F"
 let newString = "";
-let rule =[["X","F+[-F-XF-X][+FF][--XF[+X]][++F-X]"],["F","FF"]]
+let rule =["F","FF+F+F+F+FF"]
 let len ;
 let prob = 1/4;
 let a = 0.25,b = 0.5,c =0.75;
@@ -13,42 +13,24 @@ String.prototype.replaceAt = function(index, replacement) {
 
 
 function RuleMaker(){
-  let ruleStr = "F[+X-";
+  let ruleStr = "";
 
-  for (let i = 0; i < 24 + random(11); i++) {
+  for (let i = 0; i < 9 + random(6); i++) {
     let maker = random();
-    if (maker >= 0  && maker < a ){
-      ruleStr += "-"
-      a-=probC;
-      if (a <= 0){
-        a+=probC;
-      }
-    }else if (maker >= a  && maker < b){
+    if (maker < 1/3 ){
+      ruleStr += "F";
+    }else if(maker >= 1/3 && maker < 2/3){
       ruleStr += "+";
-      a+=probC;
-      if (a >= b){
-        a-=probC
-      }
+    }else{
+      ruleStr += "-";
 
-    }else if (maker >= b  && maker < c){
-      ruleStr += "X"
-    }else if (maker >= c  && maker < 1 ){
-      ruleStr += "F"
     }
 
   }
-  for (let i = 0; i < 3 + random(3); i++) {
-    let indI = round(12*random(ruleStr.length)) %(ruleStr.length-8) + 4;
-    let indF=  round(12*random(ruleStr.length)) %(ruleStr.length-4-indI) + indI+3;
-    if(ruleStr.charAt(indI) != "[" && ruleStr.charAt(indF) != "]" ){
-      ruleStr = ruleStr.replaceAt(indI,"[");
-      ruleStr = ruleStr.replaceAt(indF,"]")
-    }
-    
-  }
-  ruleStr += "]";
+  
+  
 
-  rule[0][1] = ruleStr;
+  rule[1] = ruleStr;
   console.log(ruleStr);
   
 
@@ -58,20 +40,15 @@ function generate(){
  
     for (let i = 0; i < str.length; i++) {
       let letter = str.charAt(i);
-      let flag = true;
-      for (let k = 0; k < rule.length; k++) {
-       if(letter == rule[k][0]){
-        newString+=rule[k][1]
-        flag = false;
-        break;
+      
+      
+       if(letter == rule[0]){
+        newString+=rule[1]
+
+       }else{
+        newString+=letter;
        }
 
-        
-      }
-      if (flag){
-        newString+=letter;
-      }
-      
     }
     str = newString;
     newString = ""
@@ -83,9 +60,10 @@ function generate(){
 function turtle(){
   background(51);
   resetMatrix();
-  stroke(255,100);
-  translate(width/2,height);
-  len*=0.6;
+  stroke(255,200);
+  translate(width/2,height/2);
+  len*=0.8;
+  
   
   for (let i = 0; i < str.length; i++) {
     let curr = str.charAt(i);
@@ -96,28 +74,25 @@ function turtle(){
       rotate(angle)
     }else if(curr == "-"){
       rotate(-angle)
-    }else if(curr == "["){
-      push();
-      
-    }else if(curr == "]"){
-      pop();
-      
     }
 
   }
 }
 
 function rese(){
-  str = "X";
+  str = "F";
+  let tot = 3+ round(random(1024))%4;
+  angle = TAU/tot;
+  for(let i = 1; i < tot ; i++){
+    str+="+F"
+  }
+
+
+
   resetMatrix();
   RuleMaker();
-  len = height/8;
-  if (random() < 0.5){
-    angle = radians(random(16) + 14);
-  }else{
-    angle = -radians(random(16) + 14);
-
-  }
+  len = height/12;
+  
   background(51);
 
 
@@ -125,15 +100,19 @@ function rese(){
 
 function setup() {
   createCanvas(window.innerWidth, window.innerHeight);
+  
   let button = createButton("Generate");
-  len = height/8;
-  angle = radians(random(64)-32);
-  if (random() < 0.5){
-    angle = radians(random(16) + 14);
-  }else{
-    angle = -radians(random(16) + 14);
+  len = height/12;
+  angle = PI/2;
+  str = "F";
+  
+  let tot = 3+ round(random(1024))%4;
+  angle = TAU/tot;
 
+  for(let i = 1; i < tot ; i++){
+    str+="+F"
   }
+
   button.mousePressed(generate);
   let button2 = createButton("New");
   button2.mousePressed(rese);
@@ -145,7 +124,7 @@ function setup() {
   translate(width/2,height);
   background(51);
   strokeCap(SQUARE)
-  strokeWeight(2);
+  strokeWeight(3);
   RuleMaker();
   turtle();
   // generate();
