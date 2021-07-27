@@ -70,7 +70,7 @@ function setup() {
   
   createCanvas(Math.floor(window.innerWidth), Math.floor(window.innerHeight));
   console.log(window.innerWidth, window.innerHeight)
-  tats = Math.floor(1.5*Math.cbrt(width*height));
+  tats = Math.floor(1.2*Math.cbrt(width*height));
   console.log(tats);
 
   colorMode(RGB, tats);
@@ -119,6 +119,7 @@ function setup() {
   cooolor[r][g][b] = 1;
   stck[indexF%stckL] = [w,h,r,g,b];
   indexF+=1;
+  
   // stck.push([w,h,r,g,b]);
 
   // console.log([w,h,r,g,b]);

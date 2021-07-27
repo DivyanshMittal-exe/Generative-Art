@@ -67,3 +67,61 @@ let typing = document.querySelector('#typing');
 
 let daytoday = document.querySelector('#dayto');
 daytoday.textContent = " " + day;
+
+
+
+let cards = document.querySelectorAll('.card');
+let contacts = document.querySelectorAll('.cntctsquare');
+let cntctbox = document.querySelectorAll('.icondiv');
+
+const appearOptions = {
+  threshold:0.2,
+
+};
+
+const appearOnScroll = new IntersectionObserver(
+  function(
+    entries,appearOnScroll 
+  ){
+    entries.forEach(entry =>{
+      if(!entry.isIntersecting){
+        return;
+      }else{
+        entry.target.classList.add('appear');
+        
+        appearOnScroll.unobserve(entry.target);
+      }
+    })
+  },appearOptions
+);
+
+cards.forEach(card=>{
+  appearOnScroll.observe(card)
+})
+
+const conOptions = {
+  threshold:1,
+  rootMargin: "0px 0px -18% 0px"
+}
+
+const contactObs = new IntersectionObserver(
+  function(
+    entries,contactObs 
+  ){
+    entries.forEach(entry =>{
+      if(!entry.isIntersecting){
+        return;
+      }else{
+        entry.target.classList.add('appear');
+        cntctbox.forEach(con=>{
+          con.classList.add('appear');
+        })
+        contactObs.unobserve(entry.target);
+      }
+    })
+  },conOptions
+);
+
+contacts.forEach(card=>{
+  contactObs.observe(card)
+})

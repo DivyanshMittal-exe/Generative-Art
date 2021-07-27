@@ -102,6 +102,10 @@ function setup() {
   // console.log(cooolor);
   let w = Math.floor(random(width));
   let h = Math.floor(random(height));
+
+
+  
+
   let r = Math.floor(random(1000))%tats;
   let g = Math.floor(random(1000))%tats;
   let b = Math.floor(random(1000))%tats;
@@ -112,10 +116,6 @@ function setup() {
   cooolor[r][g][b] = 1;
   stck[indexF%stckL] = [w,h,r,g,b];
   indexF+=1;
-  // stck.push([w,h,r,g,b]);
-
-  // console.log([w,h,r,g,b]);
-
 }
 
 function draw(){
