@@ -73,6 +73,7 @@ daytoday.textContent = " " + day;
 let cards = document.querySelectorAll('.card');
 let contacts = document.querySelectorAll('.cntctsquare');
 let cntctbox = document.querySelectorAll('.icondiv');
+let homeBox = document.querySelectorAll('.homeicon')
 
 const appearOptions = {
   threshold:0.2,
@@ -114,6 +115,9 @@ const contactObs = new IntersectionObserver(
       }else{
         entry.target.classList.add('appear');
         cntctbox.forEach(con=>{
+          con.classList.add('appear');
+        })
+        homeBox.forEach(con=>{
           con.classList.add('appear');
         })
         contactObs.unobserve(entry.target);

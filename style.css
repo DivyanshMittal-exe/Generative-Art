@@ -43,26 +43,48 @@ h1,h2,h3,h4,h5,h6,.card-title{
     /* padding: 2vh; */
     width: 4rem;
     height:4rem;
+    
+
+
     transform: rotate(0);
     transition: transform 350ms cubic-bezier(0.18, 0.89, 0.32, 1.31);
 
 }
 
 .cntctsquare{
+    position: relative;
     transform: rotate(0);
     transition: transform 350ms cubic-bezier(0.18, 0.89, 0.32, 1.31);
 
 }
 
+.homeicon{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) rotate(0);
+    /* transform: rotate(0); */
+   
+    transition: transform 350ms cubic-bezier(0.18, 0.89, 0.32, 1.31);
+}
+
+.homeicon.appear{
+    transform: translate(-50%, -50%) rotate(45deg);
+}
 .icondiv.appear{
     /* padding: 2vh; */
-    width: 4rem;
-    height:4rem;
+    width: 5rem;
+    height:5rem;
     transform: rotate(45deg);
 }
 
 .cntctsquare.appear{
     transform: rotate(-45deg);
+}
+
+.inplink a,a:link,a:hover,a:active,a:visited{
+    text-decoration: none;
+    color: #fff;
 }
 
 .blockquote{
@@ -106,24 +128,24 @@ h1,h2,h3,h4,h5,h6,.card-title{
     color: #f0f6fc;
 }
 
-#icon1,#icon2,#icon3,#icon4{
+#icon1,#icon2,#icon3,#icon4,#icon5{
     font-size: 1.6rem;
     padding: 2vh;
     color: #58a6ff !important;
     ;
   }
-  #icon1:hover,#icon2:hover,#icon3:hover,#icon4:hover{
+  #icon1:hover,#icon2:hover,#icon3:hover,#icon4:hover,#icon5:hover{
     color: coral !important;
     
 
   }
 
-  #sicon1,#sicon2,#sicon3,#sicon4{
+  #sicon1,#sicon2,#sicon3,#sicon4,#sicon5{
     font-size: 1.6rem;
     color: #58a6ff !important;
     ;
   }
-  #sicon1:hover,#sicon2:hover,#sicon3:hover,#sicon4:hover{
+  #sicon1:hover,#sicon2:hover,#sicon3:hover,#sicon4:hover,#sicon5:hover{
     color: coral !important;
     
 
