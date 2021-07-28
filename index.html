@@ -70,7 +70,7 @@
       <div style="padding: 11vh 15vw 0 15vw">
         
         <div class="">
-          <h1>So, what is generative art ?</h1>
+          <h1 class="h1">So, what is generative art ?</h1>
           <p class="text pt-4">
             Generative art is basically art created by computers.
           </p>
@@ -89,15 +89,15 @@
             </figcaption>
           </figure>
 
-          <p>
+          <p class="text">
             Generative art combines two of the things which I enjoy the most, that is art and coding. Each of the art pieces here has been coded by me. For a few of them , I do take some inspiration from various other artists, whilst others are my own creations. I hope you too will appreciate them.
           </p>
         </div>
-        
+      
         <div style="padding: 20vh 0 20vh 0">
-          <div class="row row-cols-1 row-cols-sm-2 g-4">
-            <div class="col-10  pe-4">
-              <h1>Hmmm, so who are you?</h1>
+          <div class="row row-cols-1 row-cols-md-2 g-4">
+            <div class="col-12 col-md-9 ">
+              <h1 class="h1">Hmmm, so who are you?</h1>
               <p class="text pt-4">
                 My name is Divyansh Mittal. I am a sophomore at IIT Delhi,India
                 and currently pursuing Computer Science as my major.
@@ -106,15 +106,15 @@
                 about me or work with me.
               </p>
             </div>
-            <div class="col-2 ps-4">
-              <div class="d-flex align-items-center" style="position: relative;">
+            <div class="col-12 col-md-3 ">
+              <div class="d-flex align-items-center justify-content-center" style="position: relative;">
                 
                 <div class="cntctsquare">
                   <div class="homeicon">
                     <a
-                        class="text-light text-center"
-                        href="https://divyanshmittal-exe.github.io/"
-                        ><i class="bi bi-house-door-fill" id="sicon5"></i></i
+                        class="text-light py-auto my-auto "
+                        href="https://www.linkedin.com/in/divyansh-mittal-a910931ba/"
+                        ><i class="bi bi-linkedin" id="sicon5"></i
                       ></a>
                     
                   </div>
@@ -122,26 +122,28 @@
                     <div class=" icondiv text-center py-auto my-auto d-flex align-items-stretch justify-content-center">
                       <a
                         class="text-light py-auto my-auto"
-                        href="https://github.com/DivyanshMittal-exe/"
-                        ><i class="bi bi-github" id="sicon1"></i
+                        href="https://www.instagram.com/higgsboson.m/"
+                        ><i class="bi bi-instagram" id="sicon2"></i
                       ></a>
                     </div>
 
                     <div class=" icondiv text-center py-auto my-auto d-flex align-items-stretch justify-content-center">
+                      
                       <a
                         class="text-light py-auto my-auto"
-                        href="https://www.instagram.com/higgsboson.m/"
-                        ><i class="bi bi-instagram" id="sicon2"></i
+                        href="https://github.com/DivyanshMittal-exe/"
+                        ><i class="bi bi-github" id="sicon1"></i
                       ></a>
                     </div>
                   </div>
 
                   <div class="d-flex justify-content-evenly cnsqrow">
                     <div class=" icondiv text-center py-auto my-auto d-flex align-items-stretch justify-content-center">
+                      
                       <a
-                        class="text-light py-auto my-auto "
-                        href="https://www.linkedin.com/in/divyansh-mittal-a910931ba/"
-                        ><i class="bi bi-linkedin" id="sicon3"></i
+                        class="text-light text-center py-auto my-auto"
+                        href="https://divyanshmittal-exe.github.io/"
+                        ><i class="bi bi-house-door-fill" id="sicon3"></i></i
                       ></a>
                     </div>
 
@@ -235,17 +237,9 @@
                 piece, where each pixel is unique yet similar to its neighbours.
               </p>
             </div>
-            <div
-              class="
-                row row-cols-1 row-cols-sm-1
-                g-2
-                m-0
-                pt-2
-                px-2
-                buttonSurrond
-              "
-            >
-              <div class="col">
+            
+            <div class="row row-cols-1 row-cols-sm-2 g-2 m-0 p-2 buttonSurrond">
+              <div class="col-12">
                 <a
                   class="btn w-100"
                   href="RainbowSmokeBFSRand/smoke.html"
@@ -253,8 +247,7 @@
                   > Generate</a
                 >
               </div>
-            </div>
-            <div class="row row-cols-1 row-cols-sm-2 g-2 m-0 p-2 buttonSurrond">
+              <div class="w-100 d-none d-md-block"></div>
               <div class="col">
                 <a
                   class="btn w-100"
@@ -332,7 +325,7 @@
                 of particles and the path they trace.
               </p>
             </div>
-            <div class="row row-cols-1 row-cols-sm-2 g-2 m-0 p-2 buttonSurrond">
+            <div class="row row-cols-1 row-cols-md-2 g-2 m-0 p-2 buttonSurrond">
               <div class="col">
                 <a class="btn w-100" href="FlowField1/Flow.html" role="button"
                   > Generate</a
@@ -630,8 +623,8 @@
             <div class="card-body">
               <h5 class="card-title">Wall</h5>
               <p class="card-text">
-                A similar iplementation to 10 Print , but by drawing strokes o
-                varying length and different colors.
+                A similar implementation to 10 Print, but generated by drawing strokes of
+                varying length and different colors chosen from a palette.
               </p>
             </div>
             <div class="px-3 pb-2 buttonSurrond">
@@ -720,15 +713,12 @@
         <div class="container-fluid footday">
           <hr class="rgba-white-light" style="margin: 0 15%" />
 
-          <div class="d-flex justify-content-center" id="endfancys">
+          <div class="d-flex justify-content-center mb-4" id="endfancys">
             <h1 id="typing"></h1>
-            <h1 id="dayto" class="ms-2"></h1>
+            <h1 id="dayto"></h1>
           </div>
 
-          <hr
-            class="clearfix d-md-none rgba-white-light"
-            style="margin: 10% 15% 5%"
-          />
+          
 
           <div class="row pb-3">
             <div class="col-md-12">
@@ -766,7 +756,7 @@
           </div>
         </div>
 
-        <div class="footer-copyright text-center py-3">
+        <div class="footer-copyright text-center pt-1 pb-3 text">
           Designed and developed by Divyansh Mittal
         </div>
       </div>
