@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa&family=Montserrat:wght@300&family=Noto+Sans+JP&family=Open+Sans:wght@400;600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300&display=swap');
 
 
 body,.container-fluid{
@@ -203,6 +203,14 @@ h1,h2,h3,h4,h5,h6,.card-title{
    font-size: 1.8rem;
   }
 
+  #typing{
+    font-family: 'Roboto Mono', monospace;
+    /* font-variant-numeric: tabular-nums; */
+    white-space:pre;
+    font-size: 2.3rem;
+  }
+  
+
   @media screen and (max-width:991px) {
     
     #endfancys{
@@ -213,6 +221,18 @@ h1,h2,h3,h4,h5,h6,.card-title{
       position: relative;
      font-size: 4vw;
     }
-   
+    #typing{
+    
+        font-size: 1.5rem;
+      }
+    
+  }
+
+  @media screen and (max-width:630px) {
+    
+
+    #typing{
+        font-size: 1rem;
+    }
     
   }

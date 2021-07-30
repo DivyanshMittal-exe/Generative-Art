@@ -1,29 +1,31 @@
 let day = ''
 
+let curs = "|";
+
 switch (new Date().getDay()) {
   case 0:
-    day = "Sunday";
+    day = "sunday";
     break;
   case 1:
-    day = "Monday";
+    day = "monday";
     break;
   case 2:
-     day = "Tuesday";
+    day = "tuesday";
     break;
   case 3:
-    day = "Wednesday";
+    day = "wednesday";
     break;
   case 4:
-    day = "Thursday";
+    day = "thursday";
     break;
   case 5:
-    day = "Friday";
+    day = "friday";
     break;
   case 6:
-    day = "Saturday";
+    day = "saturday";
 }
 
-txts = ["ace ", "amazing ", "astonishing ", "astounding ", "awe-inspiring ", "awesome ", "badass ", "beautiful ", "bedazzling ", "bee's knees ", "best ", "breathtaking ", "brilliant ", "cat's meow ", "cat's pajamas ", "classy ", "cool ", "dandy ", "dazzling ", "delightful ", "divine ", "doozie ", "epic ", "excellent ", "exceptional ", "exquisite ", "extraordinary ", "fabulous ", "fantastic ", "fantabulous ", "fine ", "finest ", "first-class ", "first-rate ", "flawless ", "funkadelic ", "geometric ", "glorious ", "gnarly ", "good ", "grand ", "great ", "groovy ", "groundbreaking ", "hunky-dory ", "impeccable ", "impressive ", "incredible ", "kickass ", "kryptonian ", "laudable ", "legendary ", "lovely ", "luminous ", "magnificent ", "majestic ", "marvelous ", "mathematical ", "mind-blowing ", "neat ", "outstanding ", "peachy ", "perfect ", "phenomenal ", "pioneering ", "polished ", "posh ", "praiseworthy ", "premium ", "priceless ", "prime ", "primo ", "rad ", "remarkable ", "riveting ", "sensational ", "shining ", "slick ", "smashing ", "solid ", "spectacular ", "splendid ", "stellar ", "striking ", "stunning ", "stupendous ", "stylish ", "sublime ", "super ", "super-duper ", "super-excellent ", "superb ", "superior ", "supreme ", "sweet ", "swell ", "terrific ", "tiptop ", "top-notch ", "transcendent ", "tremendous ", "ultimate ", "unreal ", "well-made ", "wicked ", "wonderful ", "wondrous ", "world-class "]
+txts = ["ace", "amazing", "astonishing", "astounding", "awe-inspiring", "awesome", "badass", "beautiful", "bedazzling", "bee's knees", "best", "breathtaking", "brilliant", "cat's meow", "cat's pajamas", "classy", "cool", "dandy", "dazzling", "delightful", "divine", "doozie", "epic", "excellent", "exceptional", "exquisite", "extraordinary", "fabulous", "fantastic", "fantabulous", "fine", "finest", "first-class", "first-rate", "flawless", "funkadelic", "geometric", "glorious", "gnarly", "good", "grand", "great", "groovy", "groundbreaking", "hunky-dory", "impeccable", "impressive", "incredible", "kickass", "kryptonian", "laudable", "legendary", "lovely", "luminous", "magnificent", "majestic", "marvelous", "mathematical", "mind-blowing", "neat", "outstanding", "peachy", "perfect", "phenomenal", "pioneering", "polished", "posh", "praiseworthy", "premium", "priceless", "prime", "primo", "rad", "remarkable", "riveting", "sensational", "shining", "slick", "smashing", "solid", "spectacular", "splendid", "stellar", "striking", "stunning", "stupendous", "stylish", "sublime", "super", "super-duper", "super-excellent", "superb", "superior", "supreme", "sweet", "swell", "terrific", "tiptop", "top-notch", "transcendent", "tremendous", "ultimate", "unreal", "well-made", "wicked", "wonderful", "wondrous", "world-class"]
 
 let count = Math.floor(Math.random() * txts.length);
 let index = 0;
@@ -31,28 +33,60 @@ let currentText = '';
 let letter = '';
 let art = ''
 let typing = document.querySelector('#typing');
-(function type(){
-  
-  if (letter[0] == 'a' || letter[0] == 'e' || letter[0] == 'i' || letter[0] == 'o' || letter[0] == 'u'  ){
-    art = "an";
-  }else{
-    art = "a";
-  }
-  currentText = txts[count]
-  letter = currentText.slice(0,++index);
+let removing = false;
 
-  let c = letter.length/currentText.length;
-  
-  typing.textContent = "Stay bold & have "+ art + " " +letter ;
-  if(letter.length == currentText.length){
-    count = (count + 1+  Math.floor(Math.random() *( txts.length - 1)) ) % txts.length;
-    index = 0;
-    setTimeout(type,2000)
-  }else{
-    let timeint =Math.floor( (1.4-Math.sin(Math.PI*c))*100);
-    setTimeout(type,timeint)
-  
+(function type() {
+  currentText = txts[count];
+  // console.log(index,count,removing)
+  // typing.textContent = "Stay bold & have "+ art + " " +letter ;
+  if (letter.length == currentText.length && removing == false) {
+    // count = (count + 1 + Math.floor(Math.random() * (txts.length - 1))) % txts.length;
+    // index = 0;
+    removing = true;
+    setTimeout(type, 2000)
+  } else {
+
+    if (removing == false) {
+
+      if (letter[0] == 'a' || letter[0] == 'e' || letter[0] == 'i' || letter[0] == 'o' || letter[0] == 'u') {
+        art = "an";
+      } else {
+        art = "a";
+      }
+      
+      letter = currentText.slice(0, ++index);
+
+      let c = letter.length / currentText.length;
+      let timeint = Math.floor((1.4 - Math.sin(Math.PI * c)) * 100);
+      setTimeout(type, timeint)
+    } else {
+      if (index == 0) {
+        removing = false;
+        count = (count + 1 + Math.floor(Math.random() * (txts.length - 1))) % txts.length;
+      } else {
+        // currentText = txts[count]
+        letter = letter.slice(0,--index);
+        // index = 0
+      }
+      setTimeout(type, 30)
+    }
   }
+
+}());
+
+(function typeCursor() {
+  if (curs == "|") {
+    curs = " ";
+  } else {
+    curs = "|";
+  }
+  setTimeout(typeCursor, 300)
+
+}());
+
+(function dispText() {
+  typing.textContent = "Stay bold & have " + art + " " + letter + curs + day;
+  setTimeout(dispText, 10);
 }());
 
 // let fancyend = document.querySelector('#endfancys');
@@ -65,8 +99,8 @@ let typing = document.querySelector('#typing');
 
 
 
-let daytoday = document.querySelector('#dayto');
-daytoday.textContent = " " + day;
+// let daytoday = document.querySelector('#dayto');
+// daytoday.textContent = " " + day;
 
 
 
