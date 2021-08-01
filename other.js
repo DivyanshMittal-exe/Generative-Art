@@ -104,10 +104,9 @@ let removing = false;
 
 
 
-let cards = document.querySelectorAll('.card');
+// let cards = document.querySelectorAll('.card');
 let contacts = document.querySelectorAll('.cntctsquare');
 let cntctbox = document.querySelectorAll('.icondiv');
-let homeBox = document.querySelectorAll('.homeicon')
 
 const appearOptions = {
   threshold:0.2,
@@ -130,36 +129,114 @@ const appearOnScroll = new IntersectionObserver(
   },appearOptions
 );
 
-cards.forEach(card=>{
-  appearOnScroll.observe(card)
-})
+// cards.forEach(card=>{
+//   appearOnScroll.observe(card)
+// })
 
 const conOptions = {
   threshold:1,
   rootMargin: "0px 0px -18% 0px"
 }
 
-const contactObs = new IntersectionObserver(
-  function(
-    entries,contactObs 
-  ){
-    entries.forEach(entry =>{
-      if(!entry.isIntersecting){
-        return;
-      }else{
-        entry.target.classList.add('appear');
-        cntctbox.forEach(con=>{
-          con.classList.add('appear');
-        })
-        homeBox.forEach(con=>{
-          con.classList.add('appear');
-        })
-        contactObs.unobserve(entry.target);
-      }
-    })
-  },conOptions
-);
+// const contactObs = new IntersectionObserver(
+//   function(
+//     entries,contactObs 
+//   ){
+//     entries.forEach(entry =>{
+//       if(!entry.isIntersecting){
+//         return;
+//       }else{
+//         entry.target.classList.add('appear');
+//         cntctbox.forEach(con=>{
+//           con.classList.add('appear');
+//         })
+//         homeBox.forEach(con=>{
+//           con.classList.add('appear');
+//         })
+//         contactObs.unobserve(entry.target);
+//       }
+//     })
+//   },conOptions
+// );
 
-contacts.forEach(card=>{
-  contactObs.observe(card)
-})
+// contacts.forEach(card=>{
+//   contactObs.observe(card)
+// })
+
+gsap.registerPlugin(ScrollTrigger);
+
+let cards_g = document.querySelectorAll(".card")
+cards_g.forEach(element => {
+  gsap.to(element,{
+    scrollTrigger:{
+        trigger:element,
+        
+        start: "-30% 80%",
+        end: "-30% 50%",
+        // toggleActions:"restart none none none",
+        scrub: 1,
+        // markers: true
+    },
+    y: "0",
+    opacity:1,
+    // duration: 0.25,
+    
+    
+  });
+});
+
+
+gsap.to(".cntctsquare",{
+  scrollTrigger:{
+      trigger:".cntctsquare",
+      
+      start: "center 60%",
+      end: "center 46%",
+      // toggleActions:"restart none none none",
+      scrub: 1,
+      // markers: true
+  },
+  rotate: "45",
+  // opacity:1,
+  // duration: 0.25,
+  
+  
+});
+
+cntctbox.forEach(element => {
+  gsap.to(element,{
+    scrollTrigger:{
+      trigger:".cntctsquare",
+      
+      start: "center 60%",
+      end: "center 46%",
+      // toggleActions:"restart none none none",
+      scrub: 1,
+      // markers: true
+  },
+  rotate: "-45",
+  // opacity:1,
+  // duration: 0.25,
+  
+  
+});
+});
+
+
+
+gsap.to(".homeicon",{
+  scrollTrigger:{
+    trigger:".cntctsquare",
+    
+    start: "center 60%",
+    end: "center 46%",
+    // toggleActions:"restart none none none",
+    scrub: 1,
+    // markers: true
+},
+rotate: "-45",
+// opacity:1,
+// duration: 0.25,
+
+
+});

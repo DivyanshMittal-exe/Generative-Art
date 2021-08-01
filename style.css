@@ -107,8 +107,8 @@ h1,h2,h3,h4,h5,h6,.card-title{
 .card{
     box-shadow: 0 5px 10px -7px rgba(0, 0, 0, 0.6);
     opacity: 0;
-    transform: translateY(10%);
-    transition: opacity 250ms ease-in,transform 250ms ease-in;
+    transform: translateY(40%);
+    /* transition: opacity 250ms ease-in,transform 250ms ease-in; */
   }
   
   .card.appear{
