@@ -215,14 +215,14 @@ const vertexBufferLayout = {
   };
 
 
-let ROWS = Math.ceil(canvas2.offsetHeight/4) ;
-let COLS = Math.ceil(canvas2.offsetWidth/4);
+let ROWS = Math.ceil(canvas2.offsetHeight/2) ;
+let COLS = Math.ceil(canvas2.offsetWidth/2);
 
 console.log(ROWS);
 console.log(COLS);
 
-const WORKGROUP_ROWS = 8;
-const WORKGROUP_COLS = 8;
+const WORKGROUP_ROWS = 16;
+const WORKGROUP_COLS = 16;
 
 // Create a uniform buffer that describes the grid.
 const uniformArray = new Float32Array([COLS, ROWS]);
@@ -254,16 +254,60 @@ const cellStateStorage = [
 
 // Set each cell to a random state, then copy the JavaScript array 
 // into the storage buffer.
-for (let i = 0; i < cellStateArray.length; ++i) {
-  cellStateArray[i] = Math.random() > 0.6 ? 1 : 0;
+
+// for(let i = 0; i < ROWS; i++){
+//   for(let j = 0; j < COLS; j++){
+//     let v = i*COLS + j; 
+//     cellStateArray[v] = Math.random();
+//   }
+// }
+
+for(let i = 0; i < ROWS/3; i++){
+  for(let j = 0; j < COLS/3; j++){
+    
+
+    let v = (ROWS/3 + i) * COLS + (j + COLS/3); 
+
+    v = Math.floor(v);
+
+    cellStateArray[v] = Math.random();
+  }
 }
+
+// for(let i = 0; i < ROWS/2; i++){
+//   for(let j = 0; j < COLS/2; j++){
+//     let v = i*COLS + j; 
+//     cellStateArray[v] = 1;
+//   }
+// }
+
+// for (let i = 0; i < cellStateArray.length; ++i) {
+//   cellStateArray[i] = Math.random() > 0.6 ? 1:0;
+// } 
 device.queue.writeBuffer(cellStateStorage[0], 0, cellStateArray);
 
-// Set each cell to a random state, then copy the JavaScript array 
-// into the storage buffer.
-for (let i = 0; i < cellStateArray.length; ++i) {
-  cellStateArray[i] = Math.random() > 0.6 ? 1 : 0;
+// for(let i = 0; i < ROWS; i++){
+//   for(let j = 0; j < COLS; j++){
+//     let v = i*COLS + j; 
+//     cellStateArray[v] = Math.random();
+//   }
+// }
+
+for(let i = 0; i < ROWS/2; i++){
+  for(let j = 0; j < COLS/2; j++){
+    
+
+    let v = (3*ROWS/4 + i) * COLS + (j + 3*COLS/4); 
+
+    v = Math.floor(v);
+
+    cellStateArray[v] = 1;
+  }
 }
+
+// for (let i = 0; i < cellStateArray.length; ++i) {
+//   cellStateArray[i] = Math.random() > 0.6 ? 1:0;
+// } 
 device.queue.writeBuffer(cellStateStorage[1], 0, cellStateArray);
 
 
@@ -281,6 +325,7 @@ device.queue.writeBuffer(uniformBuffer, 0, uniformArray);
     struct VertexOutput {
       @builtin(position) pos: vec4f,
       @location(0) cell: vec2f, // New line!
+      @location(1) alphaValue: f32,
     };
     
     @group(0) @binding(0) var<uniform> grid: vec2f;
@@ -291,7 +336,14 @@ device.queue.writeBuffer(uniformBuffer, 0, uniformArray);
                   @builtin(instance_index) instance: u32) -> VertexOutput {
       let i = f32(instance);
       let cell = vec2f(i % grid.x, floor(i / grid.x));
-      let state = f32(cellState[instance]); // New line!
+      // let state = f32(cellState[instance]); // New line!
+
+      var state:f32 = 0;
+      if(f32(cellState[instance]) > 0.5){
+        state = 1;
+      }
+
+      // let state:f32 = 1;
     
       let cellOffset = cell / grid * 2;
       // New: Scale the position by the cell's active state.
@@ -300,14 +352,16 @@ device.queue.writeBuffer(uniformBuffer, 0, uniformArray);
       var output: VertexOutput;
       output.pos = vec4f(gridPos, 0, 1);
       output.cell = cell;
+      output.alphaValue = cellState[instance];
       return output;
+
     }
 
   
     @fragment
     fn fragmentMain(input: VertexOutput) -> @location(0) vec4f {
       let c = input.cell / grid;
-      return vec4f(c, 1-c.x, 1);
+      return vec4f(input.alphaValue*c, input.alphaValue*(1-c.x), 0);
     }
     `
   });
@@ -321,39 +375,81 @@ device.queue.writeBuffer(uniformBuffer, 0, uniformArray);
   
       @group(0) @binding(1) var<storage> cellStateIn: array<f32>;
       @group(0) @binding(2) var<storage, read_write> cellStateOut: array<f32>;
-  
-      fn cellIndex(cell: vec2u) -> u32 {
-        return (  ((cell.y % u32(grid.y))   +  u32(grid.y)) % u32(grid.y)  ) * u32(grid.x) + 
-        
-              (((( cell.x % u32(grid.x) ) +  u32(grid.x))) % u32(grid.x)) ;
+
+      const alpha:f32 = 0.028;
+      const b1:f32 = 0.278;
+      const b2:f32 = 0.365;
+      const d1:f32 = 0.267;
+      const d2:f32 = 0.445;
+      const dt:f32 = 0.1;
+
+
+      fn sigmaOne(x:f32,a:f32) -> f32{
+            return 1.0/(1.0 + exp(-1*(x-a)*4/alpha));
+      }
+
+      fn sigmaTwo(x:f32,a:f32,b:f32) -> f32{
+        return sigmaOne(x,a)*(1-sigmaOne(x,b));
+      }
+
+      fn sigmaM(x:f32,y:f32,m:f32) -> f32{
+        return x*(1-sigmaOne(m,0.5)) + y*(sigmaOne(m,0.5));
+      }
+
+      fn s(n:f32,m:f32) -> f32{
+        return sigmaTwo(n , sigmaM(b1,d1,m), sigmaM(b2,d2,m));
       }
   
-      fn cellActive(x: u32, y: u32) -> f32 {
+      fn cellIndex(cell: vec2i) -> i32 {
+        return (((cell.y % i32(grid.y))   +  i32(grid.y)) % i32(grid.y)  ) * i32(grid.x) + 
+              (((( cell.x % i32(grid.x) ) +  i32(grid.x))) % i32(grid.x)) ;
+      }
+  
+      fn cellActive(x: i32, y: i32) -> f32 {
         return cellStateIn[cellIndex(vec2(x, y))];
       }
   
       @compute @workgroup_size(${WORKGROUP_ROWS}, ${WORKGROUP_COLS})
-      fn computeMain(@builtin(global_invocation_id) cell: vec3u) {
-        // Determine how many active neighbors this cell has.
-        let activeNeighbors = cellActive(cell.x+1, cell.y+1) +
-                              cellActive(cell.x+1, cell.y) +
-                              cellActive(cell.x+1, cell.y-1) +
-                              cellActive(cell.x, cell.y-1) +
-                              cellActive(cell.x-1, cell.y-1) +
-                              cellActive(cell.x-1, cell.y) +
-                              cellActive(cell.x-1, cell.y+1) +
-                              cellActive(cell.x, cell.y+1);
-  
-        let i = cellIndex(cell.xy);
+      fn computeMain(@builtin(global_invocation_id) cell: vec3u) {  
 
-        if(activeNeighbors < 2.5 && activeNeighbors > 1.5){
-          cellStateOut[i] = cellStateIn[i];
-        }else if(activeNeighbors < 3.5 && activeNeighbors > 2.5 ){
-          cellStateOut[i] = 1.0;
-        }else{
-          cellStateOut[i] = 0.0;
+        // if(global_invocation_id >= (${ROWS})*(${COLS})){
+        //   return;
+        // }
+        let ri:i32 = 7;
+        let ra:i32 = 3*ri;
+
+        var innerNeighbours:f32 = 0.0;
+        var outerNeighbours:f32 = 0.0;
+
+        var innerTot:f32 = 0.0;
+        var outerTot:f32 = 0.0;
+
+        for(var dy:i32 = -1*(ra - 1); dy <= (ra - 1); dy++){
+          for(var dx:i32 = -1*(ra - 1); dx <= (ra - 1); dx++){
+            
+            if(dx*dx + dy*dy <= ri*ri){
+              innerNeighbours += cellActive(i32(cell.x) + dx, i32(cell.y)+dy);
+              innerTot += 1.0;
+            }else if(dx*dx + dy*dy <= ra*ra){
+              outerNeighbours += cellActive(i32(cell.x) + dx, i32(cell.y)+dy);
+              outerTot += 1.0;
+            }
+          }
         }
-  
+        
+        innerNeighbours /= innerTot;
+        outerNeighbours /= outerTot;
+
+        let i = cellIndex(vec2i(cell.xy));
+
+        cellStateOut[i] = cellStateIn[i] + dt*(2*s(outerNeighbours,innerNeighbours) - 1);
+
+
+        if(cellStateOut[i] > 1){
+          cellStateOut[i] = 1;
+        }else if(cellStateOut[i] < 0){
+          cellStateOut[i] = 0;
+        }
 
       }
     `
@@ -446,8 +542,19 @@ const simulationPipeline = device.createComputePipeline({
 });
 
 
-const UPDATE_INTERVAL = 200; // Update every 200ms (5 times/sec)
+const UPDATE_INTERVAL = 100; // Update every 200ms (5 times/sec)
 let step = 0; // Track how many simulation steps have been run
+
+
+// async function logCellStateStorageValues() {
+//   for (let i = 0; i < cellStateStorage.length; i++) {
+//     const value = await cellStateStorage[i].read();
+//     console.log(`Value at index ${i}:`, value);
+//   }
+// }
+
+// // Call the async function to log the values
+// logCellStateStorageValues();
 
 
 function updateGrid() {
@@ -467,6 +574,8 @@ function updateGrid() {
 
   computePass.end();
 
+  // logCellStateStorageValues();
+
   step++; // Increment the step count
   
   // Start a render pass 
@@ -478,6 +587,8 @@ function updateGrid() {
       storeOp: "store",
     }]
   });
+
+  
 
   // Draw the grid.
   pass.setPipeline(cellPipeline);
