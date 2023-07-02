@@ -82,9 +82,13 @@ h1,h2,h3,h4,h5,h6,.card-title{
     transform: rotate(-45deg);
 }
 
-.inplink a,a:link,a:hover,a:active,a:visited{
-    text-decoration: none;
-    color: #fff;
+.inplink a,
+.inplink a:link,
+.inplink a:hover,
+.inplink a:active,
+.inplink a:visited {
+  text-decoration: none;
+  color: #fff;
 }
 
 .blockquote{
