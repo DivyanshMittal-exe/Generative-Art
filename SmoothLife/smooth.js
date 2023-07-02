@@ -116,6 +116,8 @@
 //  // Call the init function when the page finishes loading
 //  window.addEventListener('load', init);
 
+window.onresize = function(){ location.reload(); }
+
 
 if (!navigator.gpu) {
     throw new Error("WebGPU not supported on this browser.");
@@ -127,6 +129,48 @@ if (!adapter) {
 }
 
 const device = await adapter.requestDevice();
+
+
+
+const canvas2 = document.getElementById('canvas');
+
+    
+const parentWidth = canvas2.parentNode.clientWidth;
+const parentHeight = canvas2.parentNode.clientHeight;
+
+    // Calculate the new width and height
+let newWidth = parentWidth;
+let newHeight = parentHeight;
+
+
+newWidth = Math.ceil(newWidth/64)*64;
+newHeight = Math.ceil(newHeight/64)*64;
+
+
+
+// Set the canvas size
+// canvas2.style.width = '100%';
+// canvas2.style.height = '100%';
+canvas2.style.width = newWidth;
+canvas2.style.height = newHeight;
+
+    // Redraw the canvas content if needed
+    // ...
+
+console.log('Canvas size adjusted:', canvas2.width, canvas2.height);
+
+
+
+const aspectRatio = 1; // Set the desired aspect ratio here
+
+console.log(canvas.offsetWidth);
+// canvas.offsetWidth = 640;
+canvas.width = canvas.offsetWidth;
+canvas.height = canvas.offsetWidth / aspectRatio;
+
+
+
+
 
 const context = canvas.getContext("webgpu");
 const canvasFormat = navigator.gpu.getPreferredCanvasFormat();
@@ -143,13 +187,13 @@ context.configure({
 
 const vertices = new Float32Array([
     //   X,    Y,
-      -0.8, -0.8, // Triangle 1 (Blue)
-       0.8, -0.8,
-       0.8,  0.8,
+      -1, -1, // Triangle 1 (Blue)
+       1, -1,
+       1,  1,
     
-      -0.8, -0.8, // Triangle 2 (Red)
-       0.8,  0.8,
-      -0.8,  0.8,
+      -1, -1, // Triangle 2 (Red)
+       1,  1,
+      -1,  1,
     ]);
 
 const vertexBuffer = device.createBuffer({
@@ -171,11 +215,17 @@ const vertexBufferLayout = {
   };
 
 
-const ROWS = 3200;
-const COLS = 3200;
+let ROWS = Math.ceil(canvas2.offsetHeight/4) ;
+let COLS = Math.ceil(canvas2.offsetWidth/4);
+
+console.log(ROWS);
+console.log(COLS);
+
+const WORKGROUP_ROWS = 8;
+const WORKGROUP_COLS = 8;
 
 // Create a uniform buffer that describes the grid.
-const uniformArray = new Float32Array([ROWS, COLS]);
+const uniformArray = new Float32Array([COLS, ROWS]);
 
 
 const uniformBuffer = device.createBuffer({
@@ -202,15 +252,17 @@ const cellStateStorage = [
   })
 ];
 
-// Mark every third cell of the first grid as active.
-for (let i = 0; i < cellStateArray.length; i+=3) {
-  cellStateArray[i] = 1;
+// Set each cell to a random state, then copy the JavaScript array 
+// into the storage buffer.
+for (let i = 0; i < cellStateArray.length; ++i) {
+  cellStateArray[i] = Math.random() > 0.6 ? 1 : 0;
 }
 device.queue.writeBuffer(cellStateStorage[0], 0, cellStateArray);
 
-// Mark every other cell of the second grid as active.
-for (let i = 0; i < cellStateArray.length; i++) {
-  cellStateArray[i] = i % 2;
+// Set each cell to a random state, then copy the JavaScript array 
+// into the storage buffer.
+for (let i = 0; i < cellStateArray.length; ++i) {
+  cellStateArray[i] = Math.random() > 0.6 ? 1 : 0;
 }
 device.queue.writeBuffer(cellStateStorage[1], 0, cellStateArray);
 
@@ -261,47 +313,137 @@ device.queue.writeBuffer(uniformBuffer, 0, uniformArray);
   });
 
 
-  const cellPipeline = device.createRenderPipeline({
-    label: "Cell pipeline",
-    layout: "auto",
-    vertex: {
-      module: cellShaderModule,
-      entryPoint: "vertexMain",
-      buffers: [vertexBufferLayout]
-    },
-    fragment: {
-      module: cellShaderModule,
-      entryPoint: "fragmentMain",
-      targets: [{
-        format: canvasFormat
-      }]
-    }
+  // Create the compute shader that will process the simulation.
+  const simulationShaderModule = device.createShaderModule({
+    label: "Life simulation shader",
+    code: `
+      @group(0) @binding(0) var<uniform> grid: vec2f;
+  
+      @group(0) @binding(1) var<storage> cellStateIn: array<f32>;
+      @group(0) @binding(2) var<storage, read_write> cellStateOut: array<f32>;
+  
+      fn cellIndex(cell: vec2u) -> u32 {
+        return (  ((cell.y % u32(grid.y))   +  u32(grid.y)) % u32(grid.y)  ) * u32(grid.x) + 
+        
+              (((( cell.x % u32(grid.x) ) +  u32(grid.x))) % u32(grid.x)) ;
+      }
+  
+      fn cellActive(x: u32, y: u32) -> f32 {
+        return cellStateIn[cellIndex(vec2(x, y))];
+      }
+  
+      @compute @workgroup_size(${WORKGROUP_ROWS}, ${WORKGROUP_COLS})
+      fn computeMain(@builtin(global_invocation_id) cell: vec3u) {
+        // Determine how many active neighbors this cell has.
+        let activeNeighbors = cellActive(cell.x+1, cell.y+1) +
+                              cellActive(cell.x+1, cell.y) +
+                              cellActive(cell.x+1, cell.y-1) +
+                              cellActive(cell.x, cell.y-1) +
+                              cellActive(cell.x-1, cell.y-1) +
+                              cellActive(cell.x-1, cell.y) +
+                              cellActive(cell.x-1, cell.y+1) +
+                              cellActive(cell.x, cell.y+1);
+  
+        let i = cellIndex(cell.xy);
+
+        if(activeNeighbors < 2.5 && activeNeighbors > 1.5){
+          cellStateOut[i] = cellStateIn[i];
+        }else if(activeNeighbors < 3.5 && activeNeighbors > 2.5 ){
+          cellStateOut[i] = 1.0;
+        }else{
+          cellStateOut[i] = 0.0;
+        }
+  
+
+      }
+    `
   });
 
-  const bindGroups = [
-    device.createBindGroup({
-      label: "Cell renderer bind group A",
-      layout: cellPipeline.getBindGroupLayout(0),
-      entries: [{
-        binding: 0,
-        resource: { buffer: uniformBuffer }
-      }, {
-        binding: 1,
-        resource: { buffer: cellStateStorage[0] }
-      }],
-    }),
-     device.createBindGroup({
-      label: "Cell renderer bind group B",
-      layout: cellPipeline.getBindGroupLayout(0),
-      entries: [{
-        binding: 0,
-        resource: { buffer: uniformBuffer }
-      }, {
-        binding: 1,
-        resource: { buffer: cellStateStorage[1] }
-      }],
-    })
-  ];
+
+// Create the bind group layout and pipeline layout.
+const bindGroupLayout = device.createBindGroupLayout({
+  label: "Cell Bind Group Layout",
+  entries: [{
+    binding: 0,
+    visibility: GPUShaderStage.VERTEX | GPUShaderStage.FRAGMENT |GPUShaderStage.COMPUTE,
+    buffer: {} // Grid uniform buffer
+  }, {
+    binding: 1,
+    visibility: GPUShaderStage.VERTEX | GPUShaderStage.FRAGMENT |GPUShaderStage.COMPUTE,
+    buffer: { type: "read-only-storage"} // Cell state input buffer
+  }, {
+    binding: 2,
+    visibility: GPUShaderStage.FRAGMENT |GPUShaderStage.COMPUTE,
+    buffer: { type: "storage"} // Cell state output buffer
+  }]
+});
+
+
+// Create a bind group to pass the grid uniforms into the pipeline
+const bindGroups = [
+  device.createBindGroup({
+    label: "Cell renderer bind group A",
+    layout: bindGroupLayout, // Updated Line
+    entries: [{
+      binding: 0,
+      resource: { buffer: uniformBuffer }
+    }, {
+      binding: 1,
+      resource: { buffer: cellStateStorage[0] }
+    }, {
+      binding: 2, // New Entry
+      resource: { buffer: cellStateStorage[1] }
+    }],
+  }),
+  device.createBindGroup({
+    label: "Cell renderer bind group B",
+    layout: bindGroupLayout, // Updated Line
+
+    entries: [{
+      binding: 0,
+      resource: { buffer: uniformBuffer }
+    }, {
+      binding: 1,
+      resource: { buffer: cellStateStorage[1] }
+    }, {
+      binding: 2, // New Entry
+      resource: { buffer: cellStateStorage[0] }
+    }],
+  }),
+];
+
+
+const pipelineLayout = device.createPipelineLayout({
+  label: "Cell Pipeline Layout",
+  bindGroupLayouts: [ bindGroupLayout ],
+});
+
+const cellPipeline = device.createRenderPipeline({
+  label: "Cell pipeline",
+  layout: pipelineLayout, // Updated!
+  vertex: {
+    module: cellShaderModule,
+    entryPoint: "vertexMain",
+    buffers: [vertexBufferLayout]
+  },
+  fragment: {
+    module: cellShaderModule,
+    entryPoint: "fragmentMain",
+    targets: [{
+      format: canvasFormat
+    }]
+  }
+});
+
+// Create a compute pipeline that updates the game state.
+const simulationPipeline = device.createComputePipeline({
+  label: "Simulation pipeline",
+  layout: pipelineLayout,
+  compute: {
+    module: simulationShaderModule,
+    entryPoint: "computeMain",
+  }
+});
 
 
 const UPDATE_INTERVAL = 200; // Update every 200ms (5 times/sec)
@@ -309,10 +451,25 @@ let step = 0; // Track how many simulation steps have been run
 
 
 function updateGrid() {
+
+  const encoder = device.createCommandEncoder();
+
+  const computePass = encoder.beginComputePass();
+
+  computePass.setPipeline(simulationPipeline),
+  computePass.setBindGroup(0, bindGroups[step % 2]);
+
+
+// New lines
+  const workgroupCount_rows = Math.ceil(ROWS / WORKGROUP_ROWS);
+  const workgroupCount_cols = Math.ceil(COLS / WORKGROUP_COLS);
+  computePass.dispatchWorkgroups(workgroupCount_rows, workgroupCount_cols);
+
+  computePass.end();
+
   step++; // Increment the step count
   
   // Start a render pass 
-  const encoder = device.createCommandEncoder();
   const pass = encoder.beginRenderPass({
     colorAttachments: [{
       view: context.getCurrentTexture().createView(),
